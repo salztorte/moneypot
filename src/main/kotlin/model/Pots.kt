@@ -1,5 +1,7 @@
 package model
 
+import com.fasterxml.jackson.annotation.JsonAlias
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
@@ -17,4 +19,13 @@ class Pot(id: EntityID<Int>): IntEntity(id) {
 
     var name by Pots.name
     var users by User via PotUsers
+}
+
+
+data class PotJson(
+        val id: Int,
+        val name: String,
+        val users: List<UserJson>
+) {
+    constructor(pot: Pot): this(pot.id.value, pot.name, pot.users.map { UserJson(it) })
 }

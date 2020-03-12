@@ -14,23 +14,26 @@ object DatabaseFactory {
 
         transaction {
             create(Pots, Users, PotUsers)
+        }
 
-            val user = User.new {
+        val user = transaction {
+            User.new {
                 name = "test"
             }
-
-            Pot.new {
-               name = "pot1"
-            }
-
-/*
-            StarWarsFilm.new {
-                name = "The Last Jedi"
-                sequelId = 8
-                director = "Rian Johnson"
-            }
-            */
         }
+
+
+        val pot = transaction {
+            Pot.new {
+                name = "pot1"
+            }
+        }
+
+
+        transaction {
+            pot.users = SizedCollection(listOf(user))
+        }
+
     }
 
     private fun hikari(): HikariDataSource {

@@ -17,13 +17,13 @@ class User(id: EntityID<Int>) : IntEntity(id) {
 
     var name by Users.name
     var pots by Pot via PotUsers
+
 }
 
 
 data class UserJson(
         val id: Int,
-        val name: String,
-        val pots: List<Pot>
+        val name: String
 ) {
-    constructor(user: User) : this(user.id.value, user.name, user.pots.toList())
+    constructor(user: User) : this(user.id.value, user.name)
 }

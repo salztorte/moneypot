@@ -11,3 +11,4 @@ object PotUsers : Table() {
 
     override val primaryKey = PrimaryKey(pot, user)
 }
+

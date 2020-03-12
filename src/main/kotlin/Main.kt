@@ -41,9 +41,7 @@ fun Application.module() {
     routing {
         get("/") {
             transaction {
-                User.all().map {
-                    UserJson(it)
-                }
+                Pot.all().map { PotJson(it)}
             }.apply {
                 call.respond(this)
             }
