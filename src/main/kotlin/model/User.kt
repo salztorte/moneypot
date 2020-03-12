@@ -16,8 +16,7 @@ class User(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<User>(Users)
 
     var name by Users.name
-    var pots by Pot via PotUsers
-
+    //var pots by Pot via PotUsers
 }
 
 

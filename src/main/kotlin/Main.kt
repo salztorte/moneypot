@@ -3,20 +3,17 @@ import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.jackson.jackson
 import io.ktor.response.respond
-import io.ktor.routing.*
+import io.ktor.routing.get
+import io.ktor.routing.routing
 import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.util.pipeline.PipelineContext
 import io.ktor.websocket.WebSockets
 import model.*
-import org.jetbrains.exposed.sql.SizedIterable
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.dsl.module
 import org.koin.ktor.ext.Koin
 import service.DatabaseFactory
-import service.DatabaseFactory.dbQuery
 
 fun Application.module() {
     install(DefaultHeaders)
@@ -36,11 +33,10 @@ fun Application.module() {
 
     DatabaseFactory.init()
 
-
-
     routing {
         get("/") {
             transaction {
+
                 Pot.all().map { PotJson(it)}
             }.apply {
                 call.respond(this)
