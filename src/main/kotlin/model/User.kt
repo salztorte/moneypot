@@ -1,28 +1,28 @@
 package model
 
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.dao.id.UUIDTable
+import java.util.*
 
 
-object Users : IntIdTable() {
-    val name = varchar("name", 50)
+object Users : UUIDTable() {
+    val displayName = varchar("display_name", 50)
 }
 
+class User(id: EntityID<UUID>) : UUIDEntity(id) {
+    companion object : UUIDEntityClass<User>(Users)
 
-class User(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<User>(Users)
+    var displayName by Users.displayName
+    var pots by Pot via PotUsers
 
-    var name by Users.name
-    //var pots by Pot via PotUsers
+
+    data class Json(
+            val id: UUID,
+            val displayName: String
+    ) {
+        constructor(user: User) : this(user.id.value, user.displayName)
+    }
+
 }
 
-
-data class UserJson(
-        val id: Int,
-        val name: String
-) {
-    constructor(user: User) : this(user.id.value, user.name)
-}

@@ -3,8 +3,6 @@ package service
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import model.*
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -20,13 +18,13 @@ object DatabaseFactory {
 
         val user = transaction {
             User.new {
-                name = "test"
+                displayName = "test"
             }
         }
 
         val user2 = transaction {
             User.new {
-                name = "test2"
+                displayName = "test2"
             }
         }
 
@@ -39,20 +37,22 @@ object DatabaseFactory {
 
         transaction {
             pot.users = SizedCollection(listOf(user, user2))
+        }
 
-
+        transaction {
             PotTransaction.new {
-                this.potId = pot.id
-                this.userId = user.id
+                setPot(pot)
+                setUser(user)
                 this.amount = 5.5
 
             }
-
             PotTransaction.new {
-                this.potId = pot.id
-                this.userId = user.id
-                this.amount = 6.0
+                setPot(pot)
+                setUser(user2)
+                this.amount = 10.0
+
             }
+
         }
 
     }

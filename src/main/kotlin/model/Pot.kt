@@ -19,17 +19,17 @@ class Pot(id: EntityID<Int>) : IntEntity(id) {
     val transactions by PotTransaction referrersOn PotTransactions.potId
 
 
-    val summOfAmount: Double
+    val sumOfAmount: Double
         get() = transactions.toList().fold(0.0) { acc, potTransaction -> acc + potTransaction.amount }
 
+    data class Json(
+            val id: Int,
+            val name: String,
+            val users: List<User.Json>,
+            val sum: Double
+    ) {
+        constructor(pot: Pot) : this(pot.id.value, pot.name, pot.users.map { User.Json(it) }, pot.sumOfAmount)
+    }
 
 }
 
-
-data class PotJson(
-        val id: Int,
-        val name: String,
-        val users: List<UserJson>
-) {
-    constructor(pot: Pot) : this(pot.id.value, pot.name, pot.users.map { UserJson(it) })
-}

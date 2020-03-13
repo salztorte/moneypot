@@ -1,7 +1,5 @@
 package model
 
-import org.jetbrains.exposed.dao.*
-import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.Table
 
 

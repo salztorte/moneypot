@@ -37,7 +37,7 @@ fun Application.module() {
         get("/") {
             transaction {
 
-                Pot.all().map { PotJson(it)}
+                User.all().map { User.Json(it)}
             }.apply {
                 call.respond(this)
             }
