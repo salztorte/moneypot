@@ -15,10 +15,12 @@ object DatabaseFactory {
         transaction {
             create(Pots, Users, PotUsers, PotTransactions, SecureUsers)
         }
+    }
 
+    fun createTestDb() {
         val user = transaction {
             User.new {
-                name = "tunin"
+                name = "tuntin"
             }
         }
 
@@ -51,7 +53,6 @@ object DatabaseFactory {
 
             }
         }
-
     }
 
     private fun hikari(): HikariDataSource {

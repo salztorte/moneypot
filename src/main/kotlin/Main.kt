@@ -4,21 +4,20 @@ import io.ktor.auth.*
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.*
 import io.ktor.jackson.jackson
-import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.response.respondText
 import io.ktor.routing.*
 import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.websocket.WebSockets
 import model.*
-import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.koin.dsl.module
 import org.koin.ktor.ext.Koin
 import org.slf4j.LoggerFactory
 import service.DatabaseFactory
+import service.UserService
+import web.login
 
 fun Application.module() {
     install(DefaultHeaders)
@@ -27,7 +26,7 @@ fun Application.module() {
     install(Koin) {
         modules(
                 module(createdAtStart = true) {
-                    single {}
+                    single { UserService() }
                 }
         )
     }
@@ -50,20 +49,16 @@ fun Application.module() {
             validate {
                 val id = it.payload.getClaim("id").asInt()
 
-
-                logger.debug("${id}")
                 transaction {
                     val user = User.findById(id)
-                    logger.debug(user?.name)
                     user
                 }
             }
         }
     }
-    DatabaseFactory.init()
-
 
     install(Routing) {
+        login()
 
         get("/") {
             transaction {
@@ -71,23 +66,6 @@ fun Application.module() {
             }.apply {
                 call.respond(this)
             }
-        }
-
-        /**
-         * A public login [Route] used to obtain JWTs
-         */
-        post("login") {
-            val credentials = call.receive<UserPasswordCredential>()
-            transaction {
-                val secureUser = SecureUser.find{
-                    (SecureUsers.loginName eq credentials.name) and (SecureUsers.password eq credentials.password)
-                }.toList().first()
-                JwtConfig.makeToken(secureUser)
-            }.apply {
-                call.respondText(this)
-            }
-
-
         }
 
         /**
@@ -102,9 +80,14 @@ fun Application.module() {
             }
         }
     }
+
+    DatabaseFactory.init()
+    DatabaseFactory.createTestDb()
 }
 
 val ApplicationCall.user get() = authentication.principal<User>()
+
+
 
 class MainApplication {
     companion object {
@@ -114,3 +97,4 @@ class MainApplication {
         }
     }
 }
+
