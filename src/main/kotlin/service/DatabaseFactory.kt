@@ -13,20 +13,24 @@ object DatabaseFactory {
         Database.connect(hikari())
 
         transaction {
-            create(Pots, Users, PotUsers, PotTransactions)
+            create(Pots, Users, PotUsers, PotTransactions, SecureUsers)
         }
 
         val user = transaction {
             User.new {
-                displayName = "test"
+                name = "tunin"
             }
         }
 
-        val user2 = transaction {
-            User.new {
-                displayName = "test2"
+
+        val secureUser1 = transaction {
+            SecureUser.new {
+                userId = user.id.value
+                loginName = user.name
+                password = "test"
             }
         }
+
 
         val pot = transaction {
             Pot.new {
@@ -36,7 +40,7 @@ object DatabaseFactory {
 
 
         transaction {
-            pot.users = SizedCollection(listOf(user, user2))
+            pot.users = SizedCollection(listOf(user))
         }
 
         transaction {
@@ -46,13 +50,6 @@ object DatabaseFactory {
                 this.amount = 5.5
 
             }
-            PotTransaction.new {
-                setPot(pot)
-                setUser(user2)
-                this.amount = 10.0
-
-            }
-
         }
 
     }

@@ -7,6 +7,7 @@ buildscript {
     ext.exposed_version = '0.22.1'
     ext.h2_version = '1.4.200'
     ext.koin_version = '2.1.3'
+    ext.logger_version = '1.2.3'
 
     repositories {
         mavenCentral()
@@ -48,6 +49,7 @@ dependencies {
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "io.ktor:ktor-jackson:$ktor_version"
     compile "io.ktor:ktor-websockets:$ktor_version"
+    implementation "io.ktor:ktor-auth-jwt:$ktor_version"
     compile "org.koin:koin-ktor:$koin_version"
 
 
@@ -56,6 +58,8 @@ dependencies {
     compile "org.jetbrains.exposed:exposed-dao:$exposed_version"
     compile "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
     compile 'com.zaxxer:HikariCP:3.4.2'
+    compile("ch.qos.logback:logback-classic:$logger_version")
+
 
     compile "ch.qos.logback:logback-classic:1.2.3"
     testCompile "org.assertj:assertj-core:3.14.0"
