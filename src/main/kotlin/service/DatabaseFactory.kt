@@ -8,11 +8,14 @@ import org.jetbrains.exposed.sql.transactions.*
 import org.jetbrains.exposed.sql.transactions.experimental.*
 
 object DatabaseFactory {
+
+    private val tables = arrayOf(Pots, Users, PotUsers, PotTransactions, SecureUsers)
+
     fun init() {
         Database.connect(hikari())
 
         transaction {
-            create(Pots, Users, PotUsers, PotTransactions, SecureUsers)
+            create(*tables)
         }
     }
 
@@ -42,7 +45,7 @@ object DatabaseFactory {
 
 
         transaction {
-            pot.users = SizedCollection(listOf(user))
+            pot.addUser(user)
         }
 
         transaction {

@@ -3,6 +3,7 @@ package model
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.*
 import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.sql.*
 
 
 object Pots : IntIdTable() {
@@ -21,6 +22,13 @@ class Pot(id: EntityID<Int>) : IntEntity(id) {
 
     val sumOfAmount: Double
         get() = transactions.toList().fold(0.0) { acc, potTransaction -> acc + potTransaction.amount }
+
+
+    fun addUser(user: User) {
+        val list = users.toMutableList()
+        list.add(user)
+        users = SizedCollection(list)
+    }
 
     data class Json(
             val id: Int,

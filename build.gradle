@@ -62,10 +62,8 @@ dependencies {
     compile 'com.zaxxer:HikariCP:3.4.2'
     compile("ch.qos.logback:logback-classic:$logger_version")
 
-
-    compile "ch.qos.logback:logback-classic:1.2.3"
-    testCompile "org.assertj:assertj-core:3.14.0"
-    testCompile "io.rest-assured:rest-assured:4.1.2"
+    testCompile "org.amshove.kluent:kluent:1.38"
     testCompile "org.junit.jupiter:junit-jupiter-api:5.5.1"
+    testCompile "io.ktor:ktor-server-test-host:$ktor_version"
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.1'
 }

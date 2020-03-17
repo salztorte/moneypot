@@ -10,7 +10,7 @@ object SecureUsers: IntIdTable() {
     val loginName = varchar("login_name", 50)
     val password = varchar("password", 50)
 
-//    override val primaryKey = PrimaryKey(userId, loginName)
+    override val primaryKey = PrimaryKey(userId, loginName)
 }
 
 

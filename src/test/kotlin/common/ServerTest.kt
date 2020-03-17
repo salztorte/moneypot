@@ -1,59 +1,27 @@
 package common
 
-import io.ktor.application.Application
-import io.ktor.server.engine.ApplicationEngine
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.engine.stop
-import io.ktor.server.netty.Netty
-import io.restassured.RestAssured
-import io.restassured.response.ResponseBodyExtractionOptions
-import io.restassured.specification.RequestSpecification
-import kotlinx.coroutines.runBlocking
-import model.Widgets
+import io.ktor.http.*
+import io.ktor.server.testing.*
 import module
-import org.jetbrains.exposed.sql.deleteAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
-import java.util.concurrent.TimeUnit
+import org.amshove.kluent.*
+import org.junit.jupiter.api.*
 
 open class ServerTest {
-
-    protected fun RequestSpecification.When(): RequestSpecification {
-        return this.`when`()
-    }
-
-    protected inline fun <reified T> ResponseBodyExtractionOptions.to(): T {
-        return this.`as`(T::class.java)
-    }
-
-    companion object {
-
-        private var serverStarted = false
-
-        private lateinit var server: ApplicationEngine
-
-        @BeforeAll
-        @JvmStatic
-        fun startServer() {
-            if (!serverStarted) {
-                server = embeddedServer(Netty, 8080, module = Application::module)
-                server.start()
-                serverStarted = true
-
-                RestAssured.baseURI = "http://localhost"
-                RestAssured.port = 8080
-                Runtime.getRuntime().addShutdownHook(Thread { server.stop(0, 0, TimeUnit.SECONDS) })
-            }
+    @Test
+    fun `health_check is ok`() = withServer {
+        handleRequest {
+            method = HttpMethod.Get
+            uri = "/health_check"
+        }.apply {
+            requestHandled shouldBe true
+            response.status() shouldEqual HttpStatusCode.OK
+            response.content shouldEqual "OK"
         }
     }
 
-    @BeforeEach
-    fun before() = runBlocking {
-        newSuspendedTransaction {
-            Widgets.deleteAll()
-            Unit
-        }
+    private fun withServer(block: TestApplicationEngine.() -> Unit) {
+        withTestApplication({ module() }, block)
     }
+
 
 }

@@ -2,7 +2,10 @@ import com.fasterxml.jackson.databind.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
+import io.ktor.content.*
 import io.ktor.features.*
+import io.ktor.http.*
+import io.ktor.http.ContentType.Text.Plain
 import io.ktor.jackson.*
 import io.ktor.locations.*
 import io.ktor.response.*
@@ -22,6 +25,14 @@ fun Application.module() {
     install(CallLogging)
     install(WebSockets)
     install(Locations)
+    install(StatusPages) {
+        exception<NotImplementedError> { call.respond(HttpStatusCode.NotImplemented) }
+        status(HttpStatusCode.NotFound) {
+            val content = TextContent("${it.value} ${it.description}", Plain.withCharset(Charsets.UTF_8), it)
+            call.respond(HttpStatusCode.NotFound, content)
+        }
+        exception<Throwable> { call.respond(HttpStatusCode.InternalServerError) }
+    }
     install(Koin) {
         modules(
                 module(createdAtStart = true) {
@@ -75,6 +86,12 @@ fun Application.module() {
                     call.respond(User.Json(user))
                 }
             }
+        }
+
+
+        get("/health_check") {
+            // Check databases/other services.
+            call.respondText("OK")
         }
     }
 
