@@ -1,10 +1,9 @@
 package common
 
 import io.ktor.http.*
-import io.ktor.server.testing.*
-import module
 import org.amshove.kluent.*
 import org.junit.jupiter.api.*
+import withServer
 
 open class ServerTest {
     @Test
@@ -18,10 +17,7 @@ open class ServerTest {
             response.content shouldEqual "OK"
         }
     }
-
-    private fun withServer(block: TestApplicationEngine.() -> Unit) {
-        withTestApplication({ module() }, block)
-    }
-
-
 }
+
+
+
