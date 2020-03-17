@@ -9,15 +9,15 @@ import io.ktor.response.respondText
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import org.koin.ktor.ext.inject
-import service.UserService
+import service.AuthenticationService
 
-fun Route.login() {
-    val userService: UserService by inject()
+fun Route.authentication() {
+    val authenticationService: AuthenticationService by inject()
 
     post("login") {
         val credentials = call.receive<UserPasswordCredential>()
 
-        val user = userService.getUserForCredentials(credentials);
+        val user = authenticationService.getUserForCredentials(credentials);
 
         if(user == null) {
             call.respond(HttpStatusCode.Unauthorized)

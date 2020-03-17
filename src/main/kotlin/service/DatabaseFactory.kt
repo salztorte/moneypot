@@ -3,6 +3,7 @@ package service
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import model.*
+import model.Users.email
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -20,7 +21,8 @@ object DatabaseFactory {
     fun createTestDb() {
         val user = transaction {
             User.new {
-                name = "tuntin"
+                name = "tunin"
+                email = "tunin@ente.de"
             }
         }
 

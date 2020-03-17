@@ -16,8 +16,8 @@ import org.koin.dsl.module
 import org.koin.ktor.ext.Koin
 import org.slf4j.LoggerFactory
 import service.DatabaseFactory
-import service.UserService
-import web.login
+import service.AuthenticationService
+import web.authentication
 
 fun Application.module() {
     install(DefaultHeaders)
@@ -26,7 +26,7 @@ fun Application.module() {
     install(Koin) {
         modules(
                 module(createdAtStart = true) {
-                    single { UserService() }
+                    single { AuthenticationService() }
                 }
         )
     }
@@ -50,15 +50,14 @@ fun Application.module() {
                 val id = it.payload.getClaim("id").asInt()
 
                 transaction {
-                    val user = User.findById(id)
-                    user
+                    User.findById(id)
                 }
             }
         }
     }
 
     install(Routing) {
-        login()
+        authentication()
 
         get("/") {
             transaction {
@@ -75,7 +74,7 @@ fun Application.module() {
             route("secret") {
                 get {
                     val user = call.user!!
-                    call.respond(user.name)
+                    call.respond(User.Json(user))
                 }
             }
         }
@@ -86,7 +85,6 @@ fun Application.module() {
 }
 
 val ApplicationCall.user get() = authentication.principal<User>()
-
 
 
 class MainApplication {
