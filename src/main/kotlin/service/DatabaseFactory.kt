@@ -3,7 +3,6 @@ package service
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import model.*
-import model.Users.email
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -22,7 +21,6 @@ object DatabaseFactory {
         val user = transaction {
             User.new {
                 name = "tunin"
-                email = "tunin@ente.de"
             }
         }
 
@@ -39,6 +37,7 @@ object DatabaseFactory {
         val pot = transaction {
             Pot.new {
                 name = "pot1"
+                owner = user
             }
         }
 
@@ -49,8 +48,8 @@ object DatabaseFactory {
 
         transaction {
             PotTransaction.new {
-                setPot(pot)
-                setUser(user)
+                this.pot = pot
+                this.user = user
                 this.amount = 5.5
 
             }

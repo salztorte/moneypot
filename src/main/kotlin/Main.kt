@@ -4,6 +4,7 @@ import io.ktor.auth.*
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.*
 import io.ktor.jackson.jackson
+import io.ktor.locations.Locations
 import io.ktor.response.respond
 import io.ktor.routing.*
 import io.ktor.server.engine.commandLineEnvironment
@@ -23,6 +24,7 @@ fun Application.module() {
     install(DefaultHeaders)
     install(CallLogging)
     install(WebSockets)
+    install(Locations)
     install(Koin) {
         modules(
                 module(createdAtStart = true) {
@@ -35,8 +37,6 @@ fun Application.module() {
             configure(SerializationFeature.INDENT_OUTPUT, true)
         }
     }
-
-    val logger = LoggerFactory.getLogger(Application::class.java)
     install(Authentication) {
         /**
          * Setup the JWT authentication to be used in [Routing].
@@ -55,6 +55,7 @@ fun Application.module() {
             }
         }
     }
+
 
     install(Routing) {
         authentication()

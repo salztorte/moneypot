@@ -49,7 +49,9 @@ dependencies {
     compile "io.ktor:ktor-server-netty:$ktor_version"
     compile "io.ktor:ktor-jackson:$ktor_version"
     compile "io.ktor:ktor-websockets:$ktor_version"
-    implementation "io.ktor:ktor-auth-jwt:$ktor_version"
+    compile "io.ktor:ktor-auth-jwt:$ktor_version"
+    compile "io.ktor:ktor-locations:$ktor_version"
+
     compile "org.koin:koin-ktor:$koin_version"
 
 

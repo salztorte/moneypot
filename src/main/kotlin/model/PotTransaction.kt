@@ -20,18 +20,9 @@ object PotTransactions : IntIdTable() {
 class PotTransaction(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<PotTransaction>(PotTransactions)
 
-    var potId by PotTransactions.potId
-    var userId by PotTransactions.userId
+    var pot by Pot referencedOn PotTransactions.potId
+    var user by User referencedOn PotTransactions.userId
     var amount by PotTransactions.amount
-
-
-    fun setPot(pot: Pot) {
-        potId = pot.id
-    }
-
-    fun setUser(user: User) {
-        userId = user.id
-    }
 }
 
 

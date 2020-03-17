@@ -1,21 +1,28 @@
 package web
 
 import io.ktor.application.call
-import io.ktor.auth.UserPasswordCredential
+import io.ktor.auth.Credential
 import io.ktor.http.HttpStatusCode
+import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.Route
-import io.ktor.routing.post
 import org.koin.ktor.ext.inject
 import service.AuthenticationService
 
+
+@KtorExperimentalLocationsAPI
+@Location("login")
+data class LoginRequest(val name: String, val password: String): Credential
+
+
+@KtorExperimentalLocationsAPI
 fun Route.authentication() {
     val authenticationService: AuthenticationService by inject()
 
-    post("login") {
-        val credentials = call.receive<UserPasswordCredential>()
+    post<LoginRequest> {
+        val credentials = call.receive<LoginRequest>()
 
         val user = authenticationService.getUserForCredentials(credentials);
 
@@ -27,5 +34,4 @@ fun Route.authentication() {
         }
 
     }
-
 }
