@@ -1,24 +1,21 @@
-import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.*
 import io.ktor.application.*
 import io.ktor.auth.*
-import io.ktor.auth.jwt.jwt
+import io.ktor.auth.jwt.*
 import io.ktor.features.*
-import io.ktor.jackson.jackson
-import io.ktor.locations.Locations
-import io.ktor.response.respond
+import io.ktor.jackson.*
+import io.ktor.locations.*
+import io.ktor.response.*
 import io.ktor.routing.*
-import io.ktor.server.engine.commandLineEnvironment
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
-import io.ktor.websocket.WebSockets
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import io.ktor.websocket.*
 import model.*
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.koin.dsl.module
-import org.koin.ktor.ext.Koin
-import org.slf4j.LoggerFactory
-import service.DatabaseFactory
-import service.AuthenticationService
-import web.authentication
+import org.jetbrains.exposed.sql.transactions.*
+import org.koin.dsl.*
+import org.koin.ktor.ext.*
+import service.*
+import web.*
 
 fun Application.module() {
     install(DefaultHeaders)

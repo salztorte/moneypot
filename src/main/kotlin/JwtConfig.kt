@@ -1,8 +1,6 @@
-import com.auth0.jwt.JWT
-import com.auth0.jwt.JWTVerifier
-import com.auth0.jwt.algorithms.Algorithm
-import model.SecureUser
-import model.User
+import com.auth0.jwt.*
+import com.auth0.jwt.algorithms.*
+import model.*
 import java.util.*
 
 object JwtConfig {

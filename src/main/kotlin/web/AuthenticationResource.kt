@@ -1,15 +1,15 @@
 package web
 
-import io.ktor.application.call
-import io.ktor.auth.Credential
-import io.ktor.http.HttpStatusCode
+import JwtConfig
+import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.http.*
 import io.ktor.locations.*
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.response.respondText
-import io.ktor.routing.Route
-import org.koin.ktor.ext.inject
-import service.AuthenticationService
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import org.koin.ktor.ext.*
+import service.*
 
 
 @KtorExperimentalLocationsAPI

@@ -1,6 +1,6 @@
 package model
 
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.*
 
 
 object PotUsers : Table() {

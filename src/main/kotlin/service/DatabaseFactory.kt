@@ -1,12 +1,11 @@
 package service
 
-import com.zaxxer.hikari.HikariConfig
-import com.zaxxer.hikari.HikariDataSource
+import com.zaxxer.hikari.*
 import model.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SchemaUtils.create
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.transactions.*
+import org.jetbrains.exposed.sql.transactions.experimental.*
 
 object DatabaseFactory {
     fun init() {

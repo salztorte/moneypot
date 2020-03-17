@@ -1,10 +1,8 @@
 package model
 
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.*
+import org.jetbrains.exposed.dao.id.*
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.Table
 
 object PotTransactions : IntIdTable() {
     val potId = reference("potId", Pots)

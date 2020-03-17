@@ -1,14 +1,18 @@
 package service
 
-import io.ktor.auth.UserPasswordCredential
+import io.ktor.auth.*
 import model.*
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.transactions.transaction
-import web.LoginRequest
-import web.RegisterRequest
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.*
+import web.*
 
 class AuthenticationService {
 
+    /**
+     *
+     * @param credentials LoginRequest
+     * @return User?
+     */
     fun getUserForCredentials(credentials: LoginRequest): User? {
         transaction {
             val secureUser = SecureUser.find {
@@ -25,7 +29,11 @@ class AuthenticationService {
         }
     }
 
-    fun addNewUser(credentials: RegisterRequest) {
+    /**
+     *
+     * @param credentials UserPasswordCredential
+     */
+    fun addNewUser(credentials: UserPasswordCredential) {
         transaction {
             val user = User.new {
                 name = credentials.name
