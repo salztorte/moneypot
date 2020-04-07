@@ -22,7 +22,7 @@ object DatabaseFactory {
     fun createTestDb() {
         val user = transaction {
             User.new {
-                name = "tunin"
+                name = "test"
             }
         }
 

@@ -7,11 +7,11 @@ import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.ContentType.Text.Plain
 import io.ktor.jackson.*
-import io.ktor.locations.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.util.*
 import io.ktor.websocket.*
 import model.*
 import org.jetbrains.exposed.sql.transactions.*
@@ -20,11 +20,11 @@ import org.koin.ktor.ext.*
 import service.*
 import web.*
 
+@KtorExperimentalAPI
 fun Application.module() {
     install(DefaultHeaders)
     install(CallLogging)
     install(WebSockets)
-    install(Locations)
     install(StatusPages) {
         exception<NotImplementedError> { call.respond(HttpStatusCode.NotImplemented) }
         status(HttpStatusCode.NotFound) {
@@ -67,6 +67,7 @@ fun Application.module() {
 
     install(Routing) {
         authentication()
+        healthCheck()
 
         get("/") {
             transaction {
@@ -89,10 +90,7 @@ fun Application.module() {
         }
 
 
-        get("/health_check") {
-            // Check databases/other services.
-            call.respondText("OK")
-        }
+
     }
 
     DatabaseFactory.init()

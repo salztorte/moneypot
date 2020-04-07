@@ -30,19 +30,19 @@ class AuthenticationService {
     }
 
     /**
-     *
-     * @param credentials UserPasswordCredential
+     * @param regUser RegistrationRequest
+     * @throws
      */
-    fun addNewUser(credentials: UserPasswordCredential) {
+    fun addNewUser(regUser: RegistrationRequest) {
         transaction {
             val user = User.new {
-                name = credentials.name
+                name = regUser.name
             }
 
             SecureUser.new {
                 userId = user.id.value
                 loginName = user.name
-                password = credentials.password
+                password = regUser.password
             }
         }
     }
