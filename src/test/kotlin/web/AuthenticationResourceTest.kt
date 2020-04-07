@@ -2,12 +2,14 @@ package web
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import io.ktor.util.*
 import kotlinx.serialization.json.*
 import org.amshove.kluent.*
 import org.junit.jupiter.api.*
 import withServer
 
-open class AuthenticationResourceTest {
+@KtorExperimentalAPI
+class AuthenticationResourceTest {
     @Test
     fun `test user can login`() = withServer {
         handleRequest {
@@ -20,7 +22,6 @@ open class AuthenticationResourceTest {
             }.toString())
         }.apply {
             response.status() shouldEqual HttpStatusCode.OK
-
         }
     }
 

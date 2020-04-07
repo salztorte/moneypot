@@ -2,11 +2,13 @@ package common
 
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import io.ktor.util.*
 import kotlinx.serialization.json.*
 import org.amshove.kluent.*
 import org.junit.jupiter.api.*
 import withServer
 
+@KtorExperimentalAPI
 open class ServerTest {
     @Test
     fun `health_check is ok`() = withServer {
@@ -33,6 +35,24 @@ open class ServerTest {
         }.apply {
             response.status() shouldEqual HttpStatusCode.OK
             response.content shouldEqual testData
+        }
+    }
+
+
+
+    @Test
+    fun secretTest() = withServer {
+        handleRequest {
+            method = HttpMethod.Post
+            uri = "login"
+            addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+            setBody(json{
+                "name" to "test"
+                "password" to "test"
+            }.toString())
+        }.apply {
+
+
         }
     }
 }

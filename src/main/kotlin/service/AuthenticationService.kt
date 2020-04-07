@@ -8,7 +8,7 @@ import web.*
 
 class AuthenticationService {
 
-    /**
+    /*
      *
      * @param credentials LoginRequest
      * @return User?
