@@ -1,4 +1,5 @@
 import com.fasterxml.jackson.databind.*
+import extensions.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -27,16 +28,22 @@ fun Application.module() {
     install(WebSockets)
     install(StatusPages) {
         exception<NotImplementedError> { call.respond(HttpStatusCode.NotImplemented) }
-        status(HttpStatusCode.NotFound) {
-            val content = TextContent("${it.value} ${it.description}", Plain.withCharset(Charsets.UTF_8), it)
-            call.respond(HttpStatusCode.NotFound, content)
+
+        exception<NotFoundException> {
+            call.respond(HttpStatusCode.NotFound)
         }
+//        status(HttpStatusCode.NotFound) {
+//            val content = TextContent("${it.value} ${it.description}", Plain.withCharset(Charsets.UTF_8), it)
+//            call.respond(HttpStatusCode.NotFound, content)
+//        }
+
         exception<Throwable> { call.respond(HttpStatusCode.InternalServerError) }
     }
     install(Koin) {
         modules(
                 module(createdAtStart = true) {
                     single { AuthenticationService() }
+                    single { PotService() }
                 }
         )
     }
@@ -69,22 +76,17 @@ fun Application.module() {
         authentication()
         healthCheck()
 
-        get("/") {
-            transaction {
-                User.all().toList().map { User.Json(it) }
-            }.apply {
-                call.respond(this)
-            }
-        }
 
         /**
          * All [Route]s in the authentication block are secured.
          */
         authenticate {
+            pots()
+
             route("secret") {
                 get {
-                    val user = call.user!!
-                    call.respond(User.Json(user))
+                    val user = call. user!!
+                    call.respond(User.Response(user))
                 }
             }
         }
@@ -94,11 +96,7 @@ fun Application.module() {
     }
 
     DatabaseFactory.init()
-    DatabaseFactory.createTestDb()
 }
-
-val ApplicationCall.user get() = authentication.principal<User>()
-
 
 class MainApplication {
     companion object {

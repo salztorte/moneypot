@@ -21,27 +21,36 @@ class Pot(id: EntityID<Int>) : IntEntity(id) {
 
 
     val sumOfAmount: Double
-        get() = transactions.toList().fold(0.0) { acc, potTransaction -> acc + potTransaction.amount }
+        get() = transactions.toList()
+            .fold(0.0) { acc, potTransaction -> acc + potTransaction.amount }
 
 
-    fun addUser(user: User) {
+    fun addUser(user: User): Pot {
         val list = users.toMutableList()
         list.add(user)
         users = SizedCollection(list)
+        return this
     }
 
-    data class Json(
-            val id: Int,
-            val name: String,
-            val users: List<User.Json>,
-            val sum: Double,
-            val owner: User.Json
+    fun addUser(userList: List<User>): Pot {
+        val list = users.toMutableList()
+        list.union(userList)
+        users = SizedCollection(list)
+        return this
+    }
+
+
+    data class Response(
+        val id: Int,
+        val name: String
+        //val sum: Double,
+        //val owner: User.Response
     ) {
-        constructor(pot: Pot) : this(pot.id.value,
-                pot.name,
-                pot.users.map { User.Json(it) },
-                pot.sumOfAmount,
-                User.Json(pot.owner)
+        constructor(pot: Pot) : this(
+            pot.id.value,
+            pot.name
+          //  pot.sumOfAmount,
+//            User.Response(pot.owner)
         )
     }
 

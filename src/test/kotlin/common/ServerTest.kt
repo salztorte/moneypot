@@ -37,24 +37,6 @@ open class ServerTest {
             response.content shouldEqual testData
         }
     }
-
-
-
-    @Test
-    fun secretTest() = withServer {
-        handleRequest {
-            method = HttpMethod.Post
-            uri = "login"
-            addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-            setBody(json{
-                "name" to "test"
-                "password" to "test"
-            }.toString())
-        }.apply {
-
-
-        }
-    }
 }
 
 
