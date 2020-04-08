@@ -11,6 +11,7 @@ import service.*
 
 fun Route.pots() {
     val potService: PotService by inject()
+    val userService: UserService by inject()
 
 
 
@@ -27,11 +28,10 @@ fun Route.pots() {
     }
 
     get("/pots") {
-        val user = call.user!!;
-        val pots = user.pots.toMutableList()
+        val user = call.user!!
+        val pots = userService.pots(user).map { Pot.Response(it)}
 
-
-        call.respond(pots.map { Pot.Response(it) })
+        call.respond(pots)
     }
 
 }

@@ -49,7 +49,7 @@ class PotResourceTest {
         }.apply {
             val pots = jacksonObjectMapper().readValue<List<Pot.Response>>(response.content ?: "[]")
             response.status() shouldEqual HttpStatusCode.OK
-            pots.count() `should be equal to` 2
+            pots.count() `should be equal to` 3
             pots[0].name shouldEqual "pot1"
             pots[1].name shouldEqual "pot2"
             pots[2].name shouldEqual "pot3"

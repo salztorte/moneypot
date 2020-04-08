@@ -44,6 +44,7 @@ fun Application.module() {
                 module(createdAtStart = true) {
                     single { AuthenticationService() }
                     single { PotService() }
+                    single { UserService() }
                 }
         )
     }
